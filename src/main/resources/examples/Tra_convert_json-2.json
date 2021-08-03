@@ -1,0 +1,16 @@
+[
+{
+  "empId": 101,
+  "empname" : "suneel",
+  "salary": 1000,
+  "location": "Hyderabad",
+  "pincode": 50070
+},
+{
+  "empId": 102,
+  "empname" : "Kumar",
+  "salary": 1000,
+  "location": "Chennai",
+  "pincode": 50071
+}
+]

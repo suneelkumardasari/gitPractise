@@ -1,0 +1,15 @@
+[
+{
+  "empId": 1001,
+  "empname" : "Suneel",
+  "salary": 1000,
+  "location": "Hyderabad",
+  "pincode": 50070
+},
+{
+  "empId": 1002,
+  "empname" : "Kumar",
+  "salary": 2000,
+  "location": "Vizag",
+  "pincode": 50071
+}]

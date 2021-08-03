@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="a1e1cce6-fa3f-44e0-a454-1d2b9e227472" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="7a0ee673-1394-4447-bef9-d2e2642e07a1" >
+		<db:oracle-connection host="localhost" user="muleuser" password="muleuser" serviceName="orcl" />
+	</db:config>
+	<file:config name="File_Config" doc:name="File Config" doc:id="d30d1469-5725-4115-8412-40c233363030" />
+	<flow name="foreach-flowFlow" doc:id="08b80d3e-486a-461b-9a14-210eaad2834b" >
+		<http:listener doc:name="Listener" doc:id="5f14ca61-eb69-42e4-8abf-6cf60de4db63" config-ref="HTTP_Listener_config" path="/for-each-demo"/>
+		<file:read doc:name="Read" doc:id="4d1ca2fd-74db-44f7-8c39-77c00ac76755" config-ref="File_Config" path="C:\Users\91957\Desktop\Mule_Practise\emp_details.csv"/>
+		<logger level="INFO" doc:name="Logger" doc:id="18f24db4-a39e-46e8-aba7-d0aa4f266bfd" message="#[payload]"/>
+		<ee:transform doc:name="Transform Message" doc:id="42736ea4-0825-4de0-a906-6f81c5fe6bb9" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	empId: payload01.empId as Number,
+	empname: payload01.empname  as String default "",
+	salary: payload01.salary as Number,
+	location: payload01.location as String default "",
+	pincode: payload01.pincode as Number
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<foreach doc:name="For Each" doc:id="9e23b2ef-e762-4232-81db-6ab2361f0ed1" batchSize="2">
+			<logger level="INFO" doc:name="Logger" doc:id="77115200-9805-46a8-a06d-187571bed096" message="#[payload]"/>
+			<db:insert doc:name="Insert" doc:id="34c58d27-9f50-4e9a-afc4-a919535858b9" config-ref="Database_Config">
+				<db:sql >insert into emp_details (empId,empname,salary,location,pincode) VALUES (:empId,:empname,:salary,:location,:pincode)</db:sql>
+				<db:input-parameters ><![CDATA[#[{	emppid : payload.empId,
+	empname: payload.empname,
+	salary:payload.salary,
+	location:payload.location,
+	pincode:payload.pincode
+}]]]></db:input-parameters>
+			</db:insert>
+		</foreach>
+	</flow>
+</mule>

@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="input_csv_metadata" format="csv">
+      <types:shape format="weave" example="examples/for-each-input-metadata-1.csv"><![CDATA[%dw 2.0
+
+type input_csv_metadata = Array<{|  empId: String,   empname: String,   salary: String,   location: String,   pincode: String|}>
+
+]]></types:shape>
+      <types:properties>
+        <types:property name="headerLineNumber" value="0"/>
+        <types:property name="header" value="true"/>
+        <types:property name="isQuotedString" value="false"/>
+      </types:properties>
+    </types:type>
+    <types:type name="Tra_output_metadata" format="json">
+      <types:shape format="weave" example="examples/Tra_convert_json-2.json"><![CDATA[%dw 2.0
+
+type Tra_output_metadata = Array<{|  empId: Number {"typeId": "int"},   empname: String,   salary: Number {"typeId": "int"},   location: String,   pincode: Number {"typeId": "int"}|}> {"example": "[{\\\"empId\\\":101,\\\"empname\\\":\\\"suneel\\\",\\\"salary\\\":1000,\\\"location\\\":\\\"Hyderabad\\\",\\\"pincode\\\":50070},{\\\"empId\\\":102,\\\"empname\\\":\\\"Kumar\\\",\\\"salary\\\":1000,\\\"location\\\":\\\"Chennai\\\",\\\"pincode\\\":50071}]"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#42736ea4-0825-4de0-a906-6f81c5fe6bb9">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="input_csv_metadata"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="Tra_output_metadata"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>
