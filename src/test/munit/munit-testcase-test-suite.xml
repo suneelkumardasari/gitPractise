@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="munit-testcase-test-suite.xml" />
+	<munit:test name="munit-testcase-test-suite-munit-testcaseFlowTest" doc:id="e55a5e8c-c75f-408a-a4d0-6775a9da6330" description="Test">
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="1bd063f2-dc93-432b-871a-787130290e65" >
+				<munit:attributes value='#[{queryParams: { Fname: "suneel",Lname: "kumar"}}]' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to munit-testcaseFlow" doc:id="2f2de198-24f3-4402-b0cf-f127814e0c2c" name="munit-testcaseFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="e1586fb0-938b-4809-a637-739eaac2ff77" actual="#[payload.message]" expected='#["suneel kumar"]' message='Payload has error'/>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

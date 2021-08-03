@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="7ab2059f-047e-429a-a26a-ca8dc061bd0d" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="munit-testcaseFlow" doc:id="3355da8c-30ea-4f73-911c-68b2a4c96150" >
+		<http:listener doc:name="Listener" doc:id="6f718ddd-8b4b-4679-bcce-87ee97221aff" config-ref="HTTP_Listener_config" path="/munit"/>
+		<logger level="INFO" doc:name="Logger" doc:id="b6009023-55ba-4a83-ac7d-ff7dd9e7282a" message='Recived parameters are #[attributes.queryParams.fname] #[attributes.queryParams.Lname]'/>
+		<set-variable value="#[attributes.queryParams.Fname]" doc:name="Set Variable" doc:id="22fa53f4-68de-4661-a28b-200e1620cdb5" variableName="Fname"/>
+		<set-variable value="#[attributes.queryParams.Lname]" doc:name="Set Variable" doc:id="b381fca6-0e50-4891-8858-a1e77f5eedfa" variableName="Lname"/>
+		<ee:transform doc:name="Transform Message" doc:id="0a7de9c1-3ad1-45ca-bbbd-17a8f805bc66" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	fullname: (vars.Fname as String default " ") ++ " "++ vars.Lname as String
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables />
+		</ee:transform>
+	</flow>
+</mule>

@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="outputname-json" format="json">
+      <types:shape format="weave" example="examples/fullname-json.json"><![CDATA[%dw 2.0
+
+type outputname_json = {| fullname: String |} {"example": "{\\\"fullname\\\":\\\"Suneel kumar\\\"}"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#0a7de9c1-3ad1-45ca-bbbd-17a8f805bc66">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="outputname-json"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>
