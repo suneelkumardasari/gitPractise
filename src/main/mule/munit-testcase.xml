@@ -13,6 +13,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		<logger level="INFO" doc:name="Logger" doc:id="b6009023-55ba-4a83-ac7d-ff7dd9e7282a" message='Recived parameters are #[attributes.queryParams.fname] #[attributes.queryParams.Lname]'/>
 		<set-variable value="#[attributes.queryParams.Fname]" doc:name="Set Variable" doc:id="22fa53f4-68de-4661-a28b-200e1620cdb5" variableName="Fname"/>
 		<set-variable value="#[attributes.queryParams.Lname]" doc:name="Set Variable" doc:id="b381fca6-0e50-4891-8858-a1e77f5eedfa" variableName="Lname"/>
+		<flow-ref doc:name="Flow Reference" doc:id="89febb4c-b448-4782-b28e-32c30cd369bc" name="munit-testcaseSub_Flow"/>
 		<ee:transform doc:name="Transform Message" doc:id="0a7de9c1-3ad1-45ca-bbbd-17a8f805bc66" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
@@ -25,4 +26,10 @@ output application/json
 			<ee:variables />
 		</ee:transform>
 	</flow>
+	<sub-flow name="munit-testcaseSub_Flow" doc:id="40040a3b-a8f0-49da-81db-ef5155780e07" >
+		<logger level="INFO" doc:name="Logger" doc:id="9ea95ac1-dfd9-4a15-aebc-4fdda75cf050" message="Stared Sub flow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="4ea6e81f-889e-4655-86e8-405929e71334" message="logger 2"/>
+		<logger level="INFO" doc:name="Logger" doc:id="10931d44-5037-412e-a430-99f92daf3904" message="ended sub flow"/>
+	</sub-flow>
+
 </mule>
